@@ -81,14 +81,14 @@ end
 
 describe Koinonia::StiFactory do
 
-  it "should provide an array of subclass names" do
+  it "should correctly identify valid types" do
     %w{Car Truck MonsterTruck}.each do |class_name|
-      Vehicle.subclass_names.should include( class_name )
+      Vehicle.valid_type?(class_name).should == true
     end
   end
 
-  it "should include the base class name in the list of subclass names" do
-    Vehicle.subclass_names.should include( "Vehicle" )
+  it "should indicate the base class is a valid type" do
+    Vehicle.valid_type?( "Vehicle" ).should == true
   end
 
   describe 'with the default inheritance column' do

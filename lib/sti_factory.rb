@@ -1,3 +1,4 @@
+require "ruby-debug"
 module Koinonia
   module StiFactory
     def self.included(base)
@@ -14,20 +15,24 @@ module Koinonia
     end
     
     module StiClassMethods
-      def subclass_names
-        subclasses.map(&:name).push(self.name)
+      def valid_type?(klass_name)
+        klass = Module.const_get(klass_name)
+        return false unless klass.is_a?(Class)
+        self > klass || self == klass
+      rescue NameError
+        return false
       end
-
+      
       def new_with_factory(*args)
         options = args.last.is_a?(Hash) ? args.last : {}
-        
         klass_name = identify_target_class options
-        klass = self.subclass_names.include?(klass_name) ? klass_name.constantize : self
+        klass = valid_type?(klass_name) ? klass_name.constantize : self
         
         klass.new_without_factory(*args)
       end
 
       private
+              
       def identify_target_class( options )
         class_name = options.delete(self.inheritance_column.to_sym) 
         class_name ||= options.delete(self.inheritance_column) 

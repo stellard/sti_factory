@@ -34,8 +34,8 @@
 
 
 Koinonia::StiFactory
-- should provide an array of subclass names
-- should include the base class name in the list of subclass names
+- should correctly identify valid types
+- should indicate the base class is a valid type
 
 Koinonia::StiFactory with the default inheritance column when instantiating a new object
 - should return the subclass named in the type attribute if it is a valid subclass
